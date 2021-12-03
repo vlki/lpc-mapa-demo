@@ -2,45 +2,22 @@ import Head from "next/head";
 import React from "react";
 
 import styles from "../styles/Home.module.css";
+import officesByDistrictsJson from "../public/offices_by_districts.json";
+import peopleByDistrictsJson from "../public/people_by_districts.json";
 
-export default function Home() {
-  const [peopleByDistricts, setPeopleByDistricts] = React.useState(null);
-  const [officesByDistricts, setOfficesByDistricts] = React.useState(null);
-
-  React.useEffect(() => {
-    fetch("people_by_districts.json").then((r) => {
-      if (r.ok) {
-        r.json().then((payload) => {
-          setPeopleByDistricts(payload);
-        });
-      }
-    });
-
-    fetch("offices_by_districts.json").then((r) => {
-      if (r.ok) {
-        r.json().then((payload) => {
-          setOfficesByDistricts(payload);
-        });
-      }
-    });
-  }, [setOfficesByDistricts]);
-
+export default function Home({ peopleByDistricts, officesByDistricts }) {
   const peopleCount = React.useMemo(() => {
-    return peopleByDistricts !== null
-      ? Object.values(peopleByDistricts).reduce(
-          (carry, value) => carry + value,
-          0
-        )
-      : 0;
+    return Object.values(peopleByDistricts).reduce(
+      (carry, value) => carry + value,
+      0
+    );
   }, [peopleByDistricts]);
 
   const officesCount = React.useMemo(() => {
-    return officesByDistricts !== null
-      ? Object.values(officesByDistricts).reduce(
-          (carry, value) => carry + value,
-          0
-        )
-      : 0;
+    return Object.values(officesByDistricts).reduce(
+      (carry, value) => carry + value,
+      0
+    );
   }, [officesByDistricts]);
 
   return (
@@ -77,16 +54,21 @@ export default function Home() {
         </a>
       </p>
 
-      {peopleByDistricts !== null && officesByDistricts !== null && (
-        <>
-          <h2>
-            Aktuálně {peopleCount} osob a {officesCount} ordinací
-          </h2>
+      <h2>
+        Aktuálně {peopleCount} osob a {officesCount} ordinací
+      </h2>
 
-          <p>Osoby: {JSON.stringify(peopleByDistricts)}</p>
-          <p>Ordinace: {JSON.stringify(officesByDistricts)}</p>
-        </>
-      )}
+      <p>Osoby: {JSON.stringify(peopleByDistricts)}</p>
+      <p>Ordinace: {JSON.stringify(officesByDistricts)}</p>
     </div>
   );
+}
+
+export async function getStaticProps(context) {
+  return {
+    props: {
+      officesByDistricts: officesByDistrictsJson,
+      peopleByDistricts: peopleByDistrictsJson,
+    },
+  };
 }
