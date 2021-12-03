@@ -1,9 +1,12 @@
 import Head from "next/head";
 import React from "react";
+import dynamic from "next/dynamic";
 
 import styles from "../styles/Home.module.css";
 import officesByDistrictsJson from "../public/offices_by_districts.json";
 import peopleByDistrictsJson from "../public/people_by_districts.json";
+
+const Map = dynamic(() => import("../components/Map"), { ssr: false });
 
 export default function Home({ peopleByDistricts, officesByDistricts }) {
   const peopleCount = React.useMemo(() => {
@@ -58,8 +61,10 @@ export default function Home({ peopleByDistricts, officesByDistricts }) {
         Aktuálně {peopleCount} osob a {officesCount} ordinací
       </h2>
 
-      <p>Osoby: {JSON.stringify(peopleByDistricts)}</p>
-      <p>Ordinace: {JSON.stringify(officesByDistricts)}</p>
+      <Map
+        peopleByDistricts={peopleByDistricts}
+        officesByDistricts={officesByDistricts}
+      />
     </div>
   );
 }
