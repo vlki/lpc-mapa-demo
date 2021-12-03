@@ -55,7 +55,7 @@ export default function Map({ peopleByDistricts, officesByDistricts }) {
 const mapContainerCenter = [49.8, 15.6];
 
 const markerIcon = icon({
-  iconUrl: "/marker-icon.png",
+  iconUrl: "marker-icon.png",
   iconSize: [25, 41],
 });
 
